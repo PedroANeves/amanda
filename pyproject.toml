@@ -1,0 +1,38 @@
+[tool.black]
+line-length = 80
+target-version = ['py310']
+# extend-exclude = '''
+# /(
+#   | tests
+# )/
+# '''
+
+[tool.isort]
+profile = "black"
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+src_paths = ["src"]
+include_trailing_comma = true
+float_to_top = true
+
+[tool.flake8]
+max-line-length = 80
+extend-ignore = 'E203'
+
+[tool.mypy]
+exclude = 'tests/*.py'
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = "--cov=src/ --cov-report=term --cov-report=html --cov-report=xml"
+python_files = ["tests.py", "test_*.py", "*_test.py", "tests/*.py"]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__version__.py",
+]
+
+[tool.pylint]
+disable=["missing-function-docstring", "missing-module-docstring"]

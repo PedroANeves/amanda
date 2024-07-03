@@ -1,0 +1,10 @@
+-r requirements.txt
+black  # formatting
+flake8  # linting
+Flake8-pyproject  # allows flake8 to use pyproject.toml, somehow not default
+isort  # sorting imports
+mypy  # typechecking
+pytest  # unit testing
+pytest-cov  # test coverage
+pytest-reverse  # allows reversing test order, nearly as effective as randomization
+pyinstaller  # building executables

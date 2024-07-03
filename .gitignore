@@ -1,0 +1,36 @@
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# enviroments
+venv/
+
+# distribution
+build/
+dist/
+*.spec
+
+# testing
+htmlcov/
+.tox/
+coverage
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+.pytest_cache/
+.mypy_cache/
+
+# temp
+todo
+tmp/
+*.bak
