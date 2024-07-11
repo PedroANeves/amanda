@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import timedelta
 
 from docx import Document  # type: ignore
 
@@ -75,6 +76,16 @@ def find_file(this_dir: str | None = None) -> dict[str, str]:
         if _file_has_prefix(file)
     }
     return lines
+
+
+def _add_time_delta(start: str, delta: int) -> str:
+    hs, mins, s = map(int, start.split(":", maxsplit=2))
+    start_stamp = timedelta(hours=hs, minutes=mins, seconds=s)
+    end = start_stamp + timedelta(seconds=10)
+
+    hours, _remains = divmod(int(end.total_seconds()), 60 * 60)
+    minutes, seconds = divmod(_remains, 60)
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
 def main():

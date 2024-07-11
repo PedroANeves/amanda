@@ -5,6 +5,7 @@ import pytest
 from docx import Document
 
 from src.amanda import (
+    _add_time_delta,
     _extract_name_and_timestamp,
     _has_timestamp,
     extract_rows,
@@ -84,3 +85,7 @@ def test_find_file(tmp_path):
     v2_file.touch()
 
     assert find_file(tmp_path) == {"V1": str(v1_file), "V2": str(v2_file)}
+
+
+def test__add_time_delta():
+    assert _add_time_delta("00:01:15", 10) == "00:01:25"
