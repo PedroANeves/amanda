@@ -17,7 +17,7 @@ $(VENV): requirements-dev.txt # Creates/updates a venv.
 # test
 ###############################################################################
 .PHONY: test
-test: format sort lint typing unittest # Runs full tests suites.
+test: sort format lint typing unittest # Runs full tests suites.
 	$(BIN)/pytest --reverse tests/
 
 .PHONY: lint
