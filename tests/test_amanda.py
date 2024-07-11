@@ -12,6 +12,17 @@ from src.amanda import (
     find_file,
 )
 
+EXAMPLE_LINES = [
+    (
+        "Remember when the cool thing happened?",
+        "V1 00:01:15 – Cool thing happened.",
+    ),
+    ("This line should be ignored,", "Because there is no timestamp here"),
+    (
+        "And then other thing happened.",
+        "V2 00:05:00 – Other thing.",
+    ),
+]
 
 
 @pytest.fixture
@@ -20,17 +31,7 @@ def doc(tmp_path):
     document = Document()
 
     table = document.add_table(rows=0, cols=2)
-    lines = [
-        (
-            "Remember when the cool thing happened?",
-            "V1 00:01:15 – Cool thing happened.",
-        ),
-        ("This line should be ignored,", "Because there is no timestamp here"),
-        (
-            "And then other thing happened.",
-            "V2 00:05:00 – Other thing.",
-        ),
-    ]
+    lines = EXAMPLE_LINES
     for comment, times in lines:
         cells = table.add_row().cells
         cells[0].text = comment
@@ -41,31 +42,11 @@ def doc(tmp_path):
 
 
 def test_extract_rows(doc):
-    assert extract_rows(doc) == [
-        (
-            "Remember when the cool thing happened?",
-            "V1 00:01:15 – Cool thing happened.",
-        ),
-        ("This line should be ignored,", "Because there is no timestamp here"),
-        (
-            "And then other thing happened.",
-            "V2 00:05:00 – Other thing.",
-        ),
-    ]
+    assert extract_rows(doc) == EXAMPLE_LINES
 
 
 def test_extract_timestamps():
-    lines = [
-        (
-            "Remember when the cool thing happened?",
-            "V1 00:01:15 – Cool thing happened.",
-        ),
-        ("This line should be ignored,", "Because there is no timestamp here"),
-        (
-            "And then other thing happened.",
-            "V2 00:05:00 – Other thing.",
-        ),
-    ]
+    lines = EXAMPLE_LINES
 
     assert extract_timestamps(lines) == [
         ("V1", "00:01:15"),
@@ -100,4 +81,3 @@ def test_find_file(tmp_path):
     n_file = tmp_path / "not a propper file.txt"
     n_file.touch()
     assert find_file(tmp_path) == [str(v_file)]
-
