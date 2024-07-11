@@ -57,14 +57,24 @@ def _file_has_prefix(file: os.DirEntry) -> bool:
     return file.is_file() and pattern.match(file.name) is not None
 
 
-def find_file(this_dir: str | None = None) -> list[str]:
+def _get_prefix(file: os.DirEntry) -> str:
+    m = pattern.match(file.name)
+    if m is None:
+        raise ValueError()
+    return m.groupdict()["prefix"]
+
+
+# get paths for all Vn
+def find_file(this_dir: str | None = None) -> list[tuple[str, str]]:
     if not this_dir:
         this_dir = os.path.dirname(os.path.realpath(__file__))
 
     lines = [
-        file.path for file in os.scandir(this_dir) if _file_has_prefix(file)
+        (_get_prefix(file), file.path)
+        for file in os.scandir(this_dir)
+        if _file_has_prefix(file)
     ]
-    return lines
+    return sorted(lines)
 
 
 def main():
