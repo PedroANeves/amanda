@@ -65,16 +65,16 @@ def _get_prefix(file: os.DirEntry) -> str:
 
 
 # get paths for all Vn
-def find_file(this_dir: str | None = None) -> list[tuple[str, str]]:
+def find_file(this_dir: str | None = None) -> dict[str, str]:
     if not this_dir:
         this_dir = os.path.dirname(os.path.realpath(__file__))
 
-    lines = [
-        (_get_prefix(file), file.path)
+    lines = {
+        _get_prefix(file): file.path
         for file in os.scandir(this_dir)
         if _file_has_prefix(file)
-    ]
-    return sorted(lines)
+    }
+    return lines
 
 
 def main():

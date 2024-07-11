@@ -83,4 +83,4 @@ def test_find_file(tmp_path):
     v2_file = tmp_path / "V2 file.txt"
     v2_file.touch()
 
-    assert find_file(tmp_path) == [("V1", str(v1_file)), ("V2", str(v2_file))]
+    assert find_file(tmp_path) == {"V1": str(v1_file), "V2": str(v2_file)}
