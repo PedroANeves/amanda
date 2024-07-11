@@ -4,7 +4,13 @@
 import pytest
 from docx import Document
 
-from src.amanda import extract_rows
+from src.amanda import (
+    _extract_name_and_timestamp,
+    _has_timestamp,
+    extract_rows,
+    extract_timestamps,
+)
+
 
 
 @pytest.fixture
@@ -17,6 +23,11 @@ def doc(tmp_path):
         (
             "Remember when the cool thing happened?",
             "V1 00:01:15 – Cool thing happened.",
+        ),
+        ("This line should be ignored,", "Because there is no timestamp here"),
+        (
+            "And then other thing happened.",
+            "V2 00:05:00 – Other thing.",
         ),
     ]
     for comment, times in lines:
@@ -34,4 +45,49 @@ def test_extract_rows(doc):
             "Remember when the cool thing happened?",
             "V1 00:01:15 – Cool thing happened.",
         ),
+        ("This line should be ignored,", "Because there is no timestamp here"),
+        (
+            "And then other thing happened.",
+            "V2 00:05:00 – Other thing.",
+        ),
     ]
+
+
+def test_extract_timestamps():
+    lines = [
+        (
+            "Remember when the cool thing happened?",
+            "V1 00:01:15 – Cool thing happened.",
+        ),
+        ("This line should be ignored,", "Because there is no timestamp here"),
+        (
+            "And then other thing happened.",
+            "V2 00:05:00 – Other thing.",
+        ),
+    ]
+
+    assert extract_timestamps(lines) == [
+        ("V1", "00:01:15"),
+        ("V2", "00:05:00"),
+    ]
+
+
+def test__extract_name_and_timestamp():
+    assert _extract_name_and_timestamp(
+        "V1 00:01:15 – Cool thing happened."
+    ) == ("V1", "00:01:15")
+
+
+def test__has_timestamp():
+    assert _has_timestamp("V1 00:01:15 – Cool thing happened.")
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        "This line should be ignored,",
+        "FONTES CONSULTADAS: IMAGENS:",
+    ],
+)
+def test_not_has_timestamp(line):
+    assert not _has_timestamp(line)
