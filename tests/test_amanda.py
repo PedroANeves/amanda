@@ -8,6 +8,7 @@ from src.amanda import (
     _add_time_delta,
     _extract_name_and_timestamp,
     _has_timestamp,
+    build_lines,
     extract_rows,
     extract_timestamps,
     find_file,
@@ -89,3 +90,12 @@ def test_find_file(tmp_path):
 
 def test__add_time_delta():
     assert _add_time_delta("00:01:15", 10) == "00:01:25"
+
+
+def test_build_lines():
+    timestamps = [("V1", "00:01:15"), ("V2", "00:05:00")]
+    videos = {"V1": "/path/to/V1.txt", "V2": "/path/to/V2.txt"}
+    assert build_lines(timestamps, videos) == [
+        ("/path/to/V1.txt", "00:01:15", "00:01:25"),
+        ("/path/to/V2.txt", "00:05:00", "00:05:10"),
+    ]
