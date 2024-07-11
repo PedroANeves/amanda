@@ -1,3 +1,6 @@
+import os
+import re
+
 from docx import Document  # type: ignore
 
 
@@ -44,6 +47,26 @@ def _extract_name_and_timestamp(from_line: str) -> tuple[str, str]:
 
 def _has_timestamp(line: str) -> bool:
     return line.count(":") == 2 and line.count(EN_DASH) == 1
+
+
+PREFIX = r"^(?P<prefix>V\d+).*"
+pattern = re.compile(PREFIX)
+
+
+def _file_has_prefix(file: os.DirEntry) -> bool:
+    return file.is_file() and pattern.match(file.name) is not None
+
+
+def find_file(this_dir: str | None = None) -> list[str]:
+    if not this_dir:
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+
+    lines = [
+        file.path for file in os.scandir(this_dir) if _file_has_prefix(file)
+    ]
+    return lines
+
+
 def main():
     return 0
 

@@ -9,6 +9,7 @@ from src.amanda import (
     _has_timestamp,
     extract_rows,
     extract_timestamps,
+    find_file,
 )
 
 
@@ -91,3 +92,12 @@ def test__has_timestamp():
 )
 def test_not_has_timestamp(line):
     assert not _has_timestamp(line)
+
+
+def test_find_file(tmp_path):
+    v_file = tmp_path / "V1 file.txt"
+    v_file.touch()
+    n_file = tmp_path / "not a propper file.txt"
+    n_file.touch()
+    assert find_file(tmp_path) == [str(v_file)]
+
