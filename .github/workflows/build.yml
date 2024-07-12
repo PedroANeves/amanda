@@ -1,0 +1,88 @@
+name: Build Releases
+
+on:
+  push:
+    tags: ['v*']
+    branches: ['cicd']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.x'
+
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: build execultable
+        run: |
+          pip install pyinstaller
+          pyinstaller --strip --onefile src/roteiro.py
+
+      - name: upload execultable
+        uses: actions/upload-artifact@v4
+        with:
+          name: roteiro_linux
+          path: dist/roteiro
+
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.x'
+
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: build execultable
+        run: |
+          pip install pyinstaller
+          pyinstaller --onefile src/roteiro.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: roteiro_win
+          path: dist/roteiro.exe
+
+  release:
+    needs: [build, build-win]
+    runs-on: ubuntu-latest
+    permissions:
+        contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: download linux build
+        uses: actions/download-artifact@v4
+        with:
+          name: roteiro_linux
+          path: build/linux
+
+      - name: download windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: roteiro_win
+          path: build/windows
+
+      - name: generate release body
+        run: |
+          version=$(cat src/__version__.py | cut -d\" -f 2)
+          sed -n "/^## $version$/,/^## [0-9]/p" CHANGELOG.md | sed -n '$!p' \
+          | sed 's/## /# /' > RELEASE.md
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "**build/linux/roteiro,**build/windows/roteiro.exe"
+          artifactErrorsFailBuild: true
+          bodyFile: "RELEASE.md"
+          draft: true

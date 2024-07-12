@@ -54,3 +54,17 @@ clean: # remove caches and other generated temp files.
 	find . -type d -name htmlcov -exec rm -r {} +
 	find . -type d -name dist -exec rm -r {} +
 
+.PHONY: build
+build: clean test # builds executable using pyinstaller for the local machine.
+	$(BIN)/pyinstaller --strip --onefile src/amanda.py
+
+###############################################################################
+# run
+###############################################################################
+.PHONY: run
+run: build | dist/amanda # runs executable.
+	dist/amanda
+
+.PHONY: run-local
+run-local: clean test # runs locally.
+	$(BIN)/python src/amanda.py
