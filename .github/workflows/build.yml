@@ -23,13 +23,13 @@ jobs:
       - name: build execultable
         run: |
           pip install pyinstaller
-          pyinstaller --strip --onefile src/roteiro.py
+          pyinstaller --strip --onefile src/amanda.py
 
       - name: upload execultable
         uses: actions/upload-artifact@v4
         with:
-          name: roteiro_linux
-          path: dist/roteiro
+          name: amanda_linux
+          path: dist/amanda
 
   build-win:
     runs-on: windows-latest
@@ -47,12 +47,12 @@ jobs:
       - name: build execultable
         run: |
           pip install pyinstaller
-          pyinstaller --onefile src/roteiro.py
+          pyinstaller --onefile src/amanda.py
 
       - uses: actions/upload-artifact@v4
         with:
-          name: roteiro_win
-          path: dist/roteiro.exe
+          name: amanda_win
+          path: dist/amanda.exe
 
   release:
     needs: [build, build-win]
@@ -65,13 +65,13 @@ jobs:
       - name: download linux build
         uses: actions/download-artifact@v4
         with:
-          name: roteiro_linux
+          name: amanda_linux
           path: build/linux
 
       - name: download windows build
         uses: actions/download-artifact@v4
         with:
-          name: roteiro_win
+          name: amanda_win
           path: build/windows
 
       - name: generate release body
@@ -82,7 +82,7 @@ jobs:
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "**build/linux/roteiro,**build/windows/roteiro.exe"
+          artifacts: "**build/linux/amanda,**build/windows/amanda.exe"
           artifactErrorsFailBuild: true
           bodyFile: "RELEASE.md"
           draft: true
