@@ -104,6 +104,13 @@ def save_csv(data: list, path: Path) -> None:
             f.write(f"{line[0]},{line[1]},{line[2]}\n")
 
 
+def get_markers(filename: str) -> list[str]:
+    rows = extract_rows(filename)
+    timestamps = extract_timestamps(rows)
+    videos = find_file()
+    return build_lines(timestamps, videos)
+
+
 def main():
     return 0
 
