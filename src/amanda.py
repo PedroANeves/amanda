@@ -98,7 +98,7 @@ def build_lines(timestamps, videos):
 
 def save_csv(data: list, path: Path) -> None:
     filename = path / "amanda.csv"
-    with open(filename, "w") as f:
+    with open(filename, mode="w", encoding="utf-8") as f:
         f.write("filepath,start,end\n")
         for line in data:
             f.write(f"{line[0]},{line[1]},{line[2]}\n")
