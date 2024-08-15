@@ -2,7 +2,7 @@
 # https://github.com/pylint-dev/pylint/issues/6531
 # pylint: disable=redefined-outer-name
 import pytest
-from docx import Document
+from docx import Document  # type: ignore
 
 from src.amanda import (
     _add_time_delta,
