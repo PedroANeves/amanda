@@ -1,4 +1,11 @@
 # Changelog
+## 0.3.1
+2024-08-14
+### added
+### changed
+### removed
+ - removed herobrine
+
 ## 0.3.0
 2024-08-14
 ### added
