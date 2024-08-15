@@ -5,9 +5,14 @@ from datetime import timedelta
 from pathlib import Path
 from tkinter import filedialog
 
+import logging
+
 from docx import Document  # type: ignore
 
 from __version__ import VERSION
+
+LOGGER = logging.getLogger("amanda")
+logging.basicConfig(filename="amanda.log", level=logging.INFO)
 
 
 def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
@@ -116,8 +121,14 @@ def save_csv(data: list, path: Path) -> None:
 
 def get_markers(filename: str) -> list[str]:
     rows = extract_rows(filename)
+    LOGGER.info(f"{len(rows)} rows found")
+    LOGGER.info(rows)
     timestamps = extract_timestamps(rows)
+    LOGGER.info(f"{len(timestamps)} timestamps found")
+    LOGGER.info(timestamps)
     videos = find_file()
+    LOGGER.info(f"{len(videos)} videos found")
+    LOGGER.info(videos)
     return build_lines(timestamps, videos)
 
 
