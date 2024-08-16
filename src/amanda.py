@@ -1,11 +1,10 @@
+import logging
 import os
 import re
 import tkinter as tk
 from datetime import timedelta
 from pathlib import Path
 from tkinter import filedialog
-
-import logging
 
 from docx import Document  # type: ignore
 

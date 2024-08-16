@@ -5,6 +5,7 @@ import pytest
 from docx import Document  # type: ignore
 
 from src.amanda import (
+    EN_DASH,
     _add_time_delta,
     _extract_name_and_timestamp,
     _has_timestamp,
@@ -13,7 +14,6 @@ from src.amanda import (
     extract_timestamps,
     find_file,
     save_csv,
-    EN_DASH,
 )
 
 EXAMPLE_LINES = [
