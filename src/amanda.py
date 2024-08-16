@@ -143,6 +143,22 @@ def ui(marker_strategy, title):
     root.title(title)
     root.config(bg=bg_color)
 
+    # doc path
+    doc_path_frame = tk.Frame(
+        root,
+        bg=bg_color,
+    )
+    doc_path_frame.pack(padx=10, pady=10)
+
+    doc_path_label = tk.Label(
+        doc_path_frame,
+        text="no file",
+        wraplength=400,
+        anchor="w",
+        justify="left",
+    )
+    doc_path_label.grid(row=0, column=0, sticky="w", padx=5)
+
     def _ui_pick_file():
         filename = filedialog.askopenfilename(
             filetypes=(("docx", "*.docx"),),
@@ -159,13 +175,13 @@ def ui(marker_strategy, title):
 
     # pick file button
     pick_file_button = tk.Button(
-        root,
+        doc_path_frame,
         text="Load a .docx",
         command=_ui_pick_file,
         bg=bg_color,
         fg=fg_color,
     )
-    pick_file_button.pack(pady=10)
+    pick_file_button.grid(row=0, column=1, sticky="w", padx=5)
 
     # display
     text_display = tk.Text(
