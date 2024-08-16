@@ -79,10 +79,7 @@ def _get_prefix(file: os.DirEntry) -> str:
 
 
 # get paths for all Vn
-def find_file(this_dir: str | None = None) -> dict[str, str]:
-    if not this_dir:
-        this_dir = os.path.dirname(os.path.realpath(__file__))
-
+def find_file(this_dir: str) -> dict[str, str]:
     lines = {
         _get_prefix(file): file.path
         for file in os.scandir(this_dir)
@@ -122,16 +119,20 @@ def save_csv(data: list, path: Path) -> None:
             f.write(f"{line[0]},{line[1]},{line[2]}\n")
 
 
-def get_markers(filename: str) -> list[str]:
+def get_markers(filename: str, video_folder: str) -> list[str]:
+
     rows = extract_rows(filename)
     LOGGER.info(f"{len(rows)} rows found")
     LOGGER.info(rows)
+
     timestamps = extract_timestamps(rows)
     LOGGER.info(f"{len(timestamps)} timestamps found")
     LOGGER.info(timestamps)
-    videos = find_file()
+
+    videos = find_file(video_folder)
     LOGGER.info(f"{len(videos)} videos found")
     LOGGER.info(videos)
+
     return build_lines(timestamps, videos)
 
 
@@ -142,6 +143,40 @@ def ui(marker_strategy, title):
     root = tk.Tk()
     root.title(title)
     root.config(bg=bg_color)
+
+    # video folder
+    video_folder_frame = tk.Frame(
+        root,
+        bg=bg_color,
+    )
+    video_folder_frame.pack(padx=10, pady=10)
+
+    video_folder_label = tk.Label(
+        video_folder_frame,
+        text=os.getcwd(),
+        wraplength=400,
+        anchor="w",
+        justify="left",
+    )
+    video_folder_label.grid(row=0, column=0, sticky="w", padx=5)
+
+    def _ui_pick_folder():
+        folderpath = filedialog.askdirectory()
+
+        if not folderpath:  # hit 'cancel' or closed dialog
+            return
+
+        video_folder_label.config(text=folderpath)
+
+    # pick video folder
+    pick_folder_button = tk.Button(
+        video_folder_frame,
+        text="Choose Videos folder",
+        command=_ui_pick_folder,
+        bg=bg_color,
+        fg=fg_color,
+    )
+    pick_folder_button.grid(row=0, column=1, sticky="w", padx=5)
 
     # doc path
     doc_path_frame = tk.Frame(
@@ -167,7 +202,7 @@ def ui(marker_strategy, title):
         if not filename:  # hit 'cancel' or closed dialog
             return
 
-        lines = marker_strategy(filename)
+        lines = marker_strategy(filename, video_folder_label.cget("text"))
         formated_lines = format_lines(lines)
         file_contents = "".join(formated_lines)
         text_display.delete(1.0, tk.END)
