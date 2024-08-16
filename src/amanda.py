@@ -57,7 +57,11 @@ def _extract_name_and_timestamp(from_line: str) -> tuple[str, str]:
 
 
 def _has_timestamp(line: str) -> bool:
-    return line.count(":") == 2 and line.count(EN_DASH) == 1
+    return (
+        line.count(":") == 2
+        and line.count(EN_DASH) == 1
+        and line.count("V") == 1
+    )
 
 
 PREFIX = r"^(?P<prefix>V\d+).*"

@@ -13,6 +13,7 @@ from src.amanda import (
     extract_timestamps,
     find_file,
     save_csv,
+    EN_DASH,
 )
 
 EXAMPLE_LINES = [
@@ -71,7 +72,7 @@ def test__has_timestamp():
     "line",
     [
         "This line should be ignored,",
-        "FONTES CONSULTADAS: IMAGENS:",
+        f"FONTES CONSULTADAS: IMAGENS: {EN_DASH}",
     ],
 )
 def test_not_has_timestamp(line):
