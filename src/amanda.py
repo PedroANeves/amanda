@@ -103,7 +103,11 @@ def _add_time_delta(start: str, delta: int) -> str:
 
 def build_lines(timestamps, videos):
     return [
-        (videos[prefix], time_start, _add_time_delta(time_start, 10))
+        (
+            videos.get(prefix, "NOT_FOUND"),
+            time_start,
+            _add_time_delta(time_start, 10),
+        )
         for prefix, time_start in timestamps
     ]
 
