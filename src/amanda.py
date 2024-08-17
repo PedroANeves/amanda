@@ -80,9 +80,12 @@ def _get_prefix(file: os.DirEntry) -> str:
 
 # get paths for all Vn
 def find_file(this_dir: str) -> dict[str, str]:
+    all_files = [file for file in os.scandir(this_dir)]
+    LOGGER.info(f"{len(all_files)} files total")
+    LOGGER.info(all_files)
     lines = {
         _get_prefix(file): file.path
-        for file in os.scandir(this_dir)
+        for file in all_files
         if _file_has_prefix(file)
     }
     return lines
