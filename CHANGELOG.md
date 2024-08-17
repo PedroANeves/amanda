@@ -1,4 +1,14 @@
 # Changelog
+## 0.4.0
+### added
+ - added video folder picker
+ - added doc file label
+ - added logs to file locator
+### changed
+ - improved timestamp detection
+ - fixed crash on file not found
+### removed
+
 ## 0.3.1
 2024-08-14
 ### added
