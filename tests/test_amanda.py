@@ -23,6 +23,10 @@ EXAMPLE_LINES = [
     ),
     ("This line should be ignored,", "Because there is no timestamp here"),
     (
+        "And thing was photographed",
+        "J1 00:02:10 – The thing.",
+    ),
+    (
         "And then other thing happened.",
         "V2 00:05:00 – Other thing.",
     ),
@@ -54,6 +58,7 @@ def test_extract_timestamps():
 
     assert extract_timestamps(lines) == [
         ("V1", "00:01:15"),
+        ("J1", "00:02:10"),
         ("V2", "00:05:00"),
     ]
 
@@ -62,10 +67,17 @@ def test__extract_name_and_timestamp():
     assert _extract_name_and_timestamp(
         "V1 00:01:15 – Cool thing happened."
     ) == ("V1", "00:01:15")
+    assert _extract_name_and_timestamp(
+        "J1 00:05:00 – And Things have happend."
+    ) == (
+        "J1",
+        "00:05:00",
+    )
 
 
 def test__has_timestamp():
     assert _has_timestamp("V1 00:01:15 – Cool thing happened.")
+    assert _has_timestamp("J1 00:01:15 – Cool thing happened.")
 
 
 @pytest.mark.parametrize(
@@ -86,8 +98,14 @@ def test_find_file(tmp_path):
     n_file.touch()
     v2_file = tmp_path / "V2 file.txt"
     v2_file.touch()
+    j1_file = tmp_path / "J1 file.txt"
+    j1_file.touch()
 
-    assert find_file(tmp_path) == {"V1": str(v1_file), "V2": str(v2_file)}
+    assert find_file(tmp_path) == {
+        "V1": str(v1_file),
+        "V2": str(v2_file),
+        "J1": str(j1_file),
+    }
 
 
 def test__add_time_delta():
@@ -95,11 +113,16 @@ def test__add_time_delta():
 
 
 def test_build_lines():
-    timestamps = [("V1", "00:01:15"), ("V2", "00:05:00")]
-    videos = {"V1": "/path/to/V1.txt", "V2": "/path/to/V2.txt"}
+    timestamps = [("V1", "00:01:15"), ("V2", "00:05:00"), ("J1", "00:05:00")]
+    videos = {
+        "V1": "/path/to/V1.txt",
+        "V2": "/path/to/V2.txt",
+        "J1": "/path/to/J1.txt",
+    }
     assert build_lines(timestamps, videos) == [
         ("/path/to/V1.txt", "00:01:15", "00:01:25"),
         ("/path/to/V2.txt", "00:05:00", "00:05:10"),
+        ("/path/to/J1.txt", "00:05:00", "00:05:10"),
     ]
 
 
@@ -107,6 +130,7 @@ def test_save_csv(tmp_path):
     lines = [
         ("/path/to/V1.txt", "00:01:15", "00:01:25"),
         ("/path/to/V2.txt", "00:05:00", "00:05:10"),
+        ("/path/to/J1.txt", "00:05:00", "00:05:10"),
     ]
     save_csv(lines, tmp_path)
     amanda_csv = tmp_path / "amanda.csv"
@@ -115,4 +139,5 @@ def test_save_csv(tmp_path):
         "filepath,start,end\n",
         "/path/to/V1.txt,00:01:15,00:01:25\n",
         "/path/to/V2.txt,00:05:00,00:05:10\n",
+        "/path/to/J1.txt,00:05:00,00:05:10\n",
     ]

@@ -59,11 +59,11 @@ def _has_timestamp(line: str) -> bool:
     return (
         line.count(":") == 2
         and line.count(EN_DASH) == 1
-        and line.count("V") == 1
+        and sum([line.count("V"), line.count("J")]) == 1
     )
 
 
-PREFIX = r"^(?P<prefix>V\d+).*"
+PREFIX = r"^(?P<prefix>[VJ]\d+).*"
 pattern = re.compile(PREFIX)
 
 
