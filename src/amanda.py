@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import sys
 import tkinter as tk
 from datetime import timedelta
 from pathlib import Path
@@ -76,6 +77,14 @@ def _get_prefix(file: os.DirEntry) -> str:
     if m is None:
         raise ValueError()
     return m.groupdict()["prefix"]
+
+
+def normalize_path(raw_path: str) -> str:
+    # TODO change bulshit fix
+    if sys.platform == "win32":
+        return raw_path.replace("/", "\\")
+    else:
+        return raw_path.replace("\\", "/")
 
 
 # get paths for all Vn

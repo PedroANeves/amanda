@@ -13,6 +13,7 @@ from src.amanda import (
     extract_rows,
     extract_timestamps,
     find_file,
+    normalize_path,
     save_csv,
 )
 
@@ -86,6 +87,10 @@ def test__has_timestamp():
 )
 def test_not_has_timestamp(line):
     assert not _has_timestamp(line)
+
+
+def test_normalize_path():
+    assert normalize_path(r"\path\to\file.txt") == "/path/to/file.txt"
 
 
 def test_find_file(tmp_path):
