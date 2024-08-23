@@ -1,5 +1,15 @@
 # Changelog
+## 0.5.0
+2024-08-23
+
+### added
+ - added support for Jx files
+### changed
+ - fixed slash direction on path on windows
+### removed
+
 ## 0.4.0
+2024-08-16
 ### added
  - added video folder picker
  - added doc file label
@@ -18,6 +28,7 @@
 
 ## 0.3.0
 2024-08-14
+
 ### added
  - logging
 
