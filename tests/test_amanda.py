@@ -39,8 +39,7 @@ def doc(tmp_path):
     document = Document()
 
     table = document.add_table(rows=0, cols=2)
-    lines = EXAMPLE_LINES
-    for comment, times in lines:
+    for comment, times in EXAMPLE_LINES:
         cells = table.add_row().cells
         cells[0].text = comment
         cells[1].text = times
@@ -54,9 +53,7 @@ def test_extract_rows(doc):
 
 
 def test_extract_timestamps():
-    lines = EXAMPLE_LINES
-
-    assert extract_timestamps(lines) == [
+    assert extract_timestamps(EXAMPLE_LINES) == [
         ("V1", "00:01:15"),
         ("J1", "00:02:10"),
         ("V2", "00:05:00"),
