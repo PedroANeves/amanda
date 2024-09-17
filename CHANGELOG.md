@@ -1,5 +1,6 @@
 # Changelog
  - versioning on the executable
+ - versioning on the log filename and lines
  - fixed cicd misspellings
 ## 0.5.0
 2024-08-23

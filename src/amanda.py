@@ -11,8 +11,8 @@ from docx import Document  # type: ignore
 
 from __version__ import VERSION
 
-LOGGER = logging.getLogger("amanda")
-logging.basicConfig(filename="amanda.log", level=logging.INFO)
+LOGGER = logging.getLogger(f"amanda-{VERSION}")
+logging.basicConfig(filename=f"amanda-{VERSION}.log", level=logging.INFO)
 
 
 def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
