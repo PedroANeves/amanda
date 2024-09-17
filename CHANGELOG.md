@@ -1,8 +1,15 @@
 # Changelog
+## 0.6.0
+2024-09-17
+
+### added
  - versioning on the executable
  - versioning on the log filename and lines
+### changed
  - fixed cicd misspellings
  - fixed line formater not normalizing the slashes
+### removed
+
 ## 0.5.0
 2024-08-23
 
