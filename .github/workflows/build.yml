@@ -20,12 +20,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: build execultable
+      - name: build executable
         run: |
           pip install pyinstaller
           pyinstaller --strip --onefile src/amanda.py
 
-      - name: upload execultable
+      - name: upload executable
         uses: actions/upload-artifact@v4
         with:
           name: amanda_linux
@@ -44,7 +44,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: build execultable
+      - name: build executable
         run: |
           pip install pyinstaller
           pyinstaller --onefile src/amanda.py
