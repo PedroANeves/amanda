@@ -1,4 +1,13 @@
 # Changelog
+## 0.6.3
+2024-09-17
+
+### added
+### changed
+ - fixed yet another cicd failure on windows
+ - fixed version file
+### removed
+
 ## 0.6.2
 2024-09-17
 

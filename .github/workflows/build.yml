@@ -78,7 +78,7 @@ jobs:
           path: dist/amanda-v${{ needs.get-version.outputs.version }}.exe
 
   release:
-    needs: [build, build-win]
+    needs: [get-version, build, build-win]
     runs-on: ubuntu-latest
     permissions:
         contents: write
