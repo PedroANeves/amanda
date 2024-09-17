@@ -20,16 +20,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: get version
+        id: get_version
+        run: |
+          version=$(cat src/__version__.py | cut -d\" -f 2)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
       - name: build executable
         run: |
           pip install pyinstaller
           pyinstaller --strip --onefile src/amanda.py
 
+      - name: rename executable with version
+        run: |
+          mv dist/amanda dist/amanda-v${{ env.VERSION }}
+
       - name: upload executable
         uses: actions/upload-artifact@v4
         with:
           name: amanda_linux
-          path: dist/amanda
+          path: dist/amanda-v${{ env.VERSION }}
 
   build-win:
     runs-on: windows-latest
@@ -44,15 +54,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: get version
+        id: get_version
+        run: |
+          version=$(cat src/__version__.py | cut -d\" -f 2)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
       - name: build executable
         run: |
           pip install pyinstaller
           pyinstaller --onefile src/amanda.py
 
+      - name: rename executable with version
+        run: |
+          mv dist/amanda.exe dist/amanda-v${{ env.VERSION }}.exe
+
       - uses: actions/upload-artifact@v4
         with:
           name: amanda_win
-          path: dist/amanda.exe
+          path: dist/amanda-v${{ env.VERSION }}.exe
 
   release:
     needs: [build, build-win]
@@ -76,13 +96,12 @@ jobs:
 
       - name: generate release body
         run: |
-          version=$(cat src/__version__.py | cut -d\" -f 2)
-          sed -n "/^## $version$/,/^## [0-9]/p" CHANGELOG.md | sed -n '$!p' \
+          sed -n "/^## ${{ env.VERSION }}$/,/^## [0-9]/p" CHANGELOG.md | sed -n '$!p' \
           | sed 's/## /# /' > RELEASE.md
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "**build/linux/amanda,**build/windows/amanda.exe"
+          artifacts: "**build/linux/amanda-v${{ env.VERSION }},**build/windows/amanda-v${{ env.VERSION }}.exe"
           artifactErrorsFailBuild: true
           bodyFile: "RELEASE.md"
           draft: true
