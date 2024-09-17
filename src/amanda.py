@@ -123,7 +123,7 @@ def build_lines(timestamps, videos):
 
 def format_lines(data: list[tuple[str, str, str]]) -> list[str]:
     return ["filepath,start,end\n"] + [
-        f"{line[0]},{line[1]},{line[2]}\n" for line in data
+        f"{normalize_path(line[0])},{line[1]},{line[2]}\n" for line in data
     ]
 
 

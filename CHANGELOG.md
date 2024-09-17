@@ -2,6 +2,7 @@
  - versioning on the executable
  - versioning on the log filename and lines
  - fixed cicd misspellings
+ - fixed line formater not normalizing the slashes
 ## 0.5.0
 2024-08-23
 
