@@ -70,7 +70,7 @@ jobs:
 
       - name: rename executable with version
         run: |
-          rename dist\amanda.exe amanda-v${{ needs.get-version.outputs.version }}.exe
+          Move-Item -Path dist\amanda.exe -Destination dist\amanda-v${{ needs.get-version.outputs.version }}.exe
 
       - uses: actions/upload-artifact@v4
         with:
