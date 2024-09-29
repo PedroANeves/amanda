@@ -112,6 +112,7 @@ def test_find_file(tmp_path):
 
 def test__add_time_delta():
     assert _add_time_delta("00:01:15", 10) == "00:01:25"
+    assert _add_time_delta("00:01:15", 15) == "00:01:30"
 
 
 def test_build_lines():

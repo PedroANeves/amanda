@@ -100,10 +100,10 @@ def find_file(this_dir: str) -> dict[str, str]:
     return lines
 
 
-def _add_time_delta(start: str, delta: int) -> str:
+def _add_time_delta(start: str, delta: int = 10) -> str:
     hs, mins, s = map(int, start.split(":", maxsplit=2))
     start_stamp = timedelta(hours=hs, minutes=mins, seconds=s)
-    end = start_stamp + timedelta(seconds=10)
+    end = start_stamp + timedelta(seconds=delta)
 
     hours, _remains = divmod(int(end.total_seconds()), 60 * 60)
     minutes, seconds = divmod(_remains, 60)

@@ -5,6 +5,7 @@
 ### changed
  - removed redundant code
  - optimized logging
+ - fixed default of 10s sometimes not being used
 ### removed
 
 ## 0.6.3
