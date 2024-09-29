@@ -83,13 +83,13 @@ def normalize_path(raw_path: str) -> str:
     # TODO change bulshit fix
     if sys.platform == "win32":
         return raw_path.replace("/", "\\")
-    else:
-        return raw_path.replace("\\", "/")
+
+    return raw_path.replace("\\", "/")
 
 
 # get paths for all Vn
 def find_file(this_dir: str) -> dict[str, str]:
-    all_files = [file for file in os.scandir(this_dir)]
+    all_files = list(os.scandir(this_dir))
     LOGGER.info("%s files total", len(all_files))
     LOGGER.info(all_files)
     lines = {
