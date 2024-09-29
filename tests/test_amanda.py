@@ -24,8 +24,8 @@ EXAMPLE_LINES = [
     ),
     ("This line should be ignored,", "Because there is no timestamp here"),
     (
-        "And thing was photographed",
-        "J1 00:02:10 – The thing.",
+        "Images dont have timestamps",
+        "J1",
     ),
     (
         "And then other thing happened.",
@@ -56,7 +56,7 @@ def test_extract_rows(doc):
 def test_extract_timestamps():
     assert extract_timestamps(EXAMPLE_LINES) == [
         ("V1", "00:01:15"),
-        ("J1", "00:02:10"),
+        ("J1", "00:00:00"),
         ("V2", "00:05:00"),
     ]
 
@@ -65,17 +65,15 @@ def test__extract_name_and_timestamp():
     assert _extract_name_and_timestamp(
         "V1 00:01:15 – Cool thing happened."
     ) == ("V1", "00:01:15")
-    assert _extract_name_and_timestamp(
-        "J1 00:05:00 – And Things have happend."
-    ) == (
+    assert _extract_name_and_timestamp("J1 – Images dont have timestamps") == (
         "J1",
-        "00:05:00",
+        "00:00:00",
     )
 
 
 def test__has_timestamp():
     assert _has_timestamp("V1 00:01:15 – Cool thing happened.")
-    assert _has_timestamp("J1 00:01:15 – Cool thing happened.")
+    assert _has_timestamp("J1 – Cool thing happened.")
 
 
 @pytest.mark.parametrize(

@@ -61,7 +61,7 @@ def _extract_name_and_timestamp(from_line: str) -> tuple[str, str]:
 
     matches = m.groupdict()
     video_number = matches["prefix"]
-    timestamp = matches["timestamp"]
+    timestamp = matches["timestamp"] or "00:00:00"
 
     return video_number, timestamp
 
