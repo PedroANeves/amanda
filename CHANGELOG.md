@@ -3,6 +3,7 @@
 2024-09-29
 ### added
 ### changed
+ - optimized logging
 ### removed
 
 ## 0.6.3

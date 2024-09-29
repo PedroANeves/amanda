@@ -90,7 +90,7 @@ def normalize_path(raw_path: str) -> str:
 # get paths for all Vn
 def find_file(this_dir: str) -> dict[str, str]:
     all_files = [file for file in os.scandir(this_dir)]
-    LOGGER.info(f"{len(all_files)} files total")
+    LOGGER.info("%s files total", len(all_files))
     LOGGER.info(all_files)
     lines = {
         _get_prefix(file): file.path
@@ -138,15 +138,15 @@ def save_csv(data: list, path: Path) -> None:
 def get_markers(filename: str, video_folder: str) -> list[str]:
 
     rows = extract_rows(filename)
-    LOGGER.info(f"{len(rows)} rows found")
+    LOGGER.info("%s rows found", len(rows))
     LOGGER.info(rows)
 
     timestamps = extract_timestamps(rows)
-    LOGGER.info(f"{len(timestamps)} timestamps found")
+    LOGGER.info("%s timestamps found", len(timestamps))
     LOGGER.info(timestamps)
 
     videos = find_file(video_folder)
-    LOGGER.info(f"{len(videos)} videos found")
+    LOGGER.info("%s videos found", len(videos))
     LOGGER.info(videos)
 
     return build_lines(timestamps, videos)
