@@ -50,18 +50,24 @@ def extract_timestamps(
     ]
 
 
+IMAGE_FMT = r"(?P<prefix>[JV]\d+) ?(?P<timestamp>\d{2}:\d{2}:\d{2})?"
+image_pattern = re.compile(IMAGE_FMT)
+
+
 def _extract_name_and_timestamp(from_line: str) -> tuple[str, str]:
-    vn_and_timestamp, _comment = from_line.split(f" {EN_DASH} ", maxsplit=1)
-    video_number, timestamp = vn_and_timestamp.split(" ", maxsplit=1)
+    m = image_pattern.match(from_line)
+    if not m:
+        raise ValueError(m)
+
+    matches = m.groupdict()
+    video_number = matches["prefix"]
+    timestamp = matches["timestamp"]
+
     return video_number, timestamp
 
 
 def _has_timestamp(line: str) -> bool:
-    return (
-        line.count(":") == 2
-        and line.count(EN_DASH) == 1
-        and sum([line.count("V"), line.count("J")]) == 1
-    )
+    return bool(image_pattern.match(line))
 
 
 PREFIX = r"^(?P<prefix>[VJ]\d+).*"

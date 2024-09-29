@@ -3,6 +3,7 @@
 2024-09-29
 ### added
 ### changed
+ - unified prefix and timestamp recognition format into regex
  - removed redundant code
  - optimized logging
  - fixed default of 10s sometimes not being used
