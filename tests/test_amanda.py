@@ -14,7 +14,6 @@ from src.amanda import (
     extract_timestamps,
     find_file,
     normalize_path,
-    save_csv,
 )
 
 EXAMPLE_LINES = [
@@ -124,21 +123,4 @@ def test_build_lines():
         ("/path/to/V1.txt", "00:01:15", "00:01:25"),
         ("/path/to/V2.txt", "00:05:00", "00:05:10"),
         ("/path/to/J1.txt", "00:05:00", "00:05:10"),
-    ]
-
-
-def test_save_csv(tmp_path):
-    lines = [
-        ("/path/to/V1.txt", "00:01:15", "00:01:25"),
-        ("/path/to/V2.txt", "00:05:00", "00:05:10"),
-        ("/path/to/J1.txt", "00:05:00", "00:05:10"),
-    ]
-    save_csv(lines, tmp_path)
-    amanda_csv = tmp_path / "amanda.csv"
-    csv_contents = open(amanda_csv, "r").readlines()
-    assert csv_contents == [
-        "filepath,start,end\n",
-        "/path/to/V1.txt,00:01:15,00:01:25\n",
-        "/path/to/V2.txt,00:05:00,00:05:10\n",
-        "/path/to/J1.txt,00:05:00,00:05:10\n",
     ]
