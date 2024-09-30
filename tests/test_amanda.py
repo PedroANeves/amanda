@@ -6,6 +6,7 @@ from docx import Document  # type: ignore
 
 from src.amanda import (
     EN_DASH,
+    Row,
     _add_time_delta,
     _extract_name_and_timestamp,
     _has_timestamp,
@@ -17,16 +18,16 @@ from src.amanda import (
 )
 
 EXAMPLE_LINES = [
-    (
+    Row(
         "Remember when the cool thing happened?",
         "V1 00:01:15 – Cool thing happened.",
     ),
-    ("This line should be ignored,", "Because there is no timestamp here"),
-    (
+    Row("This line should be ignored,", "Because there is no timestamp here"),
+    Row(
         "Images dont have timestamps",
         "J1",
     ),
-    (
+    Row(
         "And then other thing happened.",
         "V2 00:05:00 – Other thing.",
     ),

@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import tkinter as tk
+from collections import namedtuple
 from datetime import timedelta
 from tkinter import filedialog
 
@@ -35,7 +36,10 @@ def get_markers(filename: str, video_folder: str) -> list[str]:
     return built_lines
 
 
-def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
+Row = namedtuple("Row", ["first", "last"])
+
+
+def extract_rows(filename: str | type[Document]) -> list[Row]:
     """Usage: lines = extract_rows('document.docx')
 
     # document.docx
@@ -52,15 +56,15 @@ def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
     """
     document = Document(filename)
     table = document.tables[0]
-    lines = [tuple(cell.text for cell in row.cells) for row in table.rows]
+    lines = [Row(row.cells[0].text, row.cells[1].text) for row in table.rows]
     return lines
 
 
-def extract_timestamps(lines: list[tuple[str, str]]) -> list[tuple[str, str]]:
+def extract_timestamps(lines: list[Row]) -> list[tuple[str, str]]:
     return [
-        _extract_name_and_timestamp(line)
-        for _, line in lines
-        if _has_timestamp(line)
+        _extract_name_and_timestamp(line.last)
+        for line in lines
+        if _has_timestamp(line.last)
     ]
 
 
