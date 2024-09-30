@@ -14,6 +14,27 @@ LOGGER = logging.getLogger(f"amanda-{VERSION}")
 logging.basicConfig(filename=f"amanda-{VERSION}.log", level=logging.INFO)
 
 
+EN_DASH = "\u2013"
+
+
+def get_markers(filename: str, video_folder: str) -> list[str]:
+
+    rows = extract_rows(filename)
+    LOGGER.info("%s rows found", len(rows))
+    LOGGER.info(rows)
+
+    timestamps = extract_timestamps(rows)
+    LOGGER.info("%s timestamps found", len(timestamps))
+    LOGGER.info(timestamps)
+
+    videos = find_file(video_folder)
+    LOGGER.info("%s videos found", len(videos))
+    LOGGER.info(videos)
+
+    built_lines = build_lines(timestamps, videos)
+    return built_lines
+
+
 def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
     """Usage: lines = extract_rows('document.docx')
 
@@ -22,7 +43,7 @@ def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
     |Remember when the cool thing happened?|V1 00:01:15 – Cool thing happened.|
     `--------------------------------------+----------------------------------`
 
-    lines ==[
+    lines == [
         (
             "Remember when the cool thing happened?",
             "V1 00:01:15 – Cool thing happened.",
@@ -35,17 +56,34 @@ def extract_rows(filename: str | type[Document]) -> list[tuple[str, str]]:
     return lines
 
 
-EN_DASH = "\u2013"
-
-
-def extract_timestamps(
-    lines: list[tuple[str, str]],
-) -> list[tuple[str, str]]:
-
+def extract_timestamps(lines: list[tuple[str, str]]) -> list[tuple[str, str]]:
     return [
         _extract_name_and_timestamp(line)
         for _, line in lines
         if _has_timestamp(line)
+    ]
+
+
+def find_file(this_dir: str) -> dict[str, str]:
+    all_files = list(os.scandir(this_dir))
+    LOGGER.info("%s files total", len(all_files))
+    LOGGER.info(all_files)
+    lines = {
+        _get_prefix(file): file.path
+        for file in all_files
+        if _file_has_prefix(file)
+    }
+    return lines
+
+
+def build_lines(timestamps, videos):
+    return [
+        (
+            videos.get(prefix, "NOT_FOUND"),
+            time_start,
+            _add_time_delta(time_start, 10),
+        )
+        for prefix, time_start in timestamps
     ]
 
 
@@ -73,10 +111,6 @@ PREFIX = r"^(?P<prefix>[VJ]\d+).*"
 pattern = re.compile(PREFIX)
 
 
-def _file_has_prefix(file: os.DirEntry) -> bool:
-    return file.is_file() and pattern.match(file.name) is not None
-
-
 def _get_prefix(file: os.DirEntry) -> str:
     m = pattern.match(file.name)
     if m is None:
@@ -84,25 +118,8 @@ def _get_prefix(file: os.DirEntry) -> str:
     return m.groupdict()["prefix"]
 
 
-def _normalize_path(raw_path: str) -> str:
-    # TODO change bulshit fix
-    if sys.platform == "win32":
-        return raw_path.replace("/", "\\")
-
-    return raw_path.replace("\\", "/")
-
-
-# get paths for all Vn
-def find_file(this_dir: str) -> dict[str, str]:
-    all_files = list(os.scandir(this_dir))
-    LOGGER.info("%s files total", len(all_files))
-    LOGGER.info(all_files)
-    lines = {
-        _get_prefix(file): file.path
-        for file in all_files
-        if _file_has_prefix(file)
-    }
-    return lines
+def _file_has_prefix(file: os.DirEntry) -> bool:
+    return file.is_file() and pattern.match(file.name) is not None
 
 
 def _add_time_delta(start: str, delta: int = 10) -> str:
@@ -115,41 +132,7 @@ def _add_time_delta(start: str, delta: int = 10) -> str:
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
-def build_lines(timestamps, videos):
-    return [
-        (
-            videos.get(prefix, "NOT_FOUND"),
-            time_start,
-            _add_time_delta(time_start, 10),
-        )
-        for prefix, time_start in timestamps
-    ]
-
-
-def format_lines(data: list[tuple[str, str, str]]) -> list[str]:
-    return ["filepath,start,end\n"] + [
-        f"{normalize_path(line[0])},{line[1]},{line[2]}\n" for line in data
-    ]
-
-
-def get_markers(filename: str, video_folder: str) -> list[str]:
-
-    rows = extract_rows(filename)
-    LOGGER.info("%s rows found", len(rows))
-    LOGGER.info(rows)
-
-    timestamps = extract_timestamps(rows)
-    LOGGER.info("%s timestamps found", len(timestamps))
-    LOGGER.info(timestamps)
-
-    videos = find_file(video_folder)
-    LOGGER.info("%s videos found", len(videos))
-    LOGGER.info(videos)
-
-    return build_lines(timestamps, videos)
-
-
-def ui(marker_strategy, title):
+def tk_gui(marker_strategy, title):
     bg_color = "#2E2E2E"
     fg_color = "white"
 
@@ -260,9 +243,23 @@ def ui(marker_strategy, title):
     root.mainloop()
 
 
+def format_lines(data: list[tuple[str, str, str]]) -> list[str]:
+    return ["filepath,start,end\n"] + [
+        f"{_normalize_path(line[0])},{line[1]},{line[2]}\n" for line in data
+    ]
+
+
+def _normalize_path(raw_path: str) -> str:
+    # TODO change bulshit fix
+    if sys.platform == "win32":
+        return raw_path.replace("/", "\\")
+
+    return raw_path.replace("\\", "/")
+
+
 def main():
 
-    ui(marker_strategy=get_markers, title=f"Amanda Software - {VERSION}")
+    tk_gui(marker_strategy=get_markers, title=f"Amanda Software - {VERSION}")
 
     return 0
 
