@@ -84,7 +84,7 @@ def _get_prefix(file: os.DirEntry) -> str:
     return m.groupdict()["prefix"]
 
 
-def normalize_path(raw_path: str) -> str:
+def _normalize_path(raw_path: str) -> str:
     # TODO change bulshit fix
     if sys.platform == "win32":
         return raw_path.replace("/", "\\")

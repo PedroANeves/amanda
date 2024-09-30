@@ -9,11 +9,11 @@ from src.amanda import (
     _add_time_delta,
     _extract_name_and_timestamp,
     _has_timestamp,
+    _normalize_path,
     build_lines,
     extract_rows,
     extract_timestamps,
     find_file,
-    normalize_path,
 )
 
 EXAMPLE_LINES = [
@@ -87,7 +87,7 @@ def test_not_has_timestamp(line):
 
 
 def test_normalize_path():
-    assert normalize_path(r"\path\to\file.txt") == "/path/to/file.txt"
+    assert _normalize_path(r"\path\to\file.txt") == "/path/to/file.txt"
 
 
 def test_find_file(tmp_path):
