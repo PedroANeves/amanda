@@ -4,6 +4,7 @@
 ### added
 ### changed
 ### removed
+ - unused save as csv file option
 
 ## 0.7.0
 2024-09-29
