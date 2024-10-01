@@ -101,11 +101,14 @@ jobs:
         run: |
           sed -n "/^## ${{ needs.get-version.outputs.version }}$/,/^## [0-9]/p" CHANGELOG.md | sed -n '$!p' \
           | sed 's/## /# /' > RELEASE.md
+          TAG_DESCRIPTION=$(git tag -l --format='%(contents)' "${{ github.ref_name }}")
+          echo "tag_description=$TAG_DESCRIPTION" >> $GITHUB_ENV
 
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "**build/linux/amanda-v${{ needs.get-version.outputs.version }},**build/windows/amanda-v${{ needs.get-version.outputs.version }}.exe"
           artifactErrorsFailBuild: true
+          name: ${{ env.tag_description }}
           bodyFile: "RELEASE.md"
           draft: true
 

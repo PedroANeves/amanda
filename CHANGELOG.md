@@ -3,6 +3,7 @@
 ## 0.8.0
 ### added
 ### changed
+ - releases titles now use tag descriptions
 ### removed
  - unused save as csv file option
 
