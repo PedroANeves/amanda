@@ -1,10 +1,11 @@
 # Changelog
 2024-09-30
-## 0.8.0
+## 0.8.1
 ### added
  - support for multiple timestamps per cell
 ### changed
  - releases titles now use tag descriptions
+ - fixed mypy configuration
 ### removed
  - unused save as csv file option
 

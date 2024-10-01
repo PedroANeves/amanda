@@ -9,7 +9,7 @@ from tkinter import filedialog
 
 from docx import Document  # type: ignore
 
-from __version__ import VERSION
+from src.__version__ import VERSION
 
 LOGGER = logging.getLogger(f"amanda-{VERSION}")
 logging.basicConfig(filename=f"amanda-{VERSION}.log", level=logging.INFO)
