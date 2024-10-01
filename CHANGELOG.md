@@ -2,6 +2,7 @@
 2024-09-30
 ## 0.8.0
 ### added
+ - support for multiple timestamps per cell
 ### changed
  - releases titles now use tag descriptions
 ### removed

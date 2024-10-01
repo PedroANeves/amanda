@@ -62,9 +62,10 @@ def extract_rows(filename: str | type[Document]) -> list[Row]:
 
 def extract_timestamps(lines: list[Row]) -> list[tuple[str, str]]:
     return [
-        _extract_name_and_timestamp(line.last)
+        timestamp
         for line in lines
         if _has_timestamp(line.last)
+        for timestamp in _extract_name_and_timestamp(line.last)
     ]
 
 
@@ -95,16 +96,18 @@ IMAGE_FMT = r"(?P<prefix>[JV]\d+) ?(?P<timestamp>\d{2}:\d{2}:\d{2})?"
 image_pattern = re.compile(IMAGE_FMT)
 
 
-def _extract_name_and_timestamp(from_line: str) -> tuple[str, str]:
-    m = image_pattern.match(from_line)
-    if not m:
-        raise ValueError(m)
+def _extract_name_and_timestamp(from_line: str) -> list[tuple[str, str]]:
+    matches = image_pattern.finditer(from_line)
+    if not matches:
+        raise ValueError(matches)
 
-    matches = m.groupdict()
-    video_number = matches["prefix"]
-    timestamp = matches["timestamp"] or "00:00:00"
-
-    return video_number, timestamp
+    return [
+        (
+            match.groupdict()["prefix"],
+            match.groupdict().get("timestamp") or "00:00:00",
+        )
+        for match in matches
+    ]
 
 
 def _has_timestamp(line: str) -> bool:

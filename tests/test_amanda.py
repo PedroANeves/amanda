@@ -31,6 +31,18 @@ EXAMPLE_LINES = [
         "And then other thing happened.",
         "V2 00:05:00 – Other thing.",
     ),
+    Row(
+        "Multiple Videos on multiline.",
+        "V7 00:00:51 – defesa do Carlos\nV7 00:01:42 – defesa do Carlos",
+    ),
+    Row(
+        "Multiple Images on line",
+        "J2 and J3",
+    ),
+    Row(
+        "Mixed images and videos.",
+        "J4\nV3 00:00:10 – Description",
+    ),
 ]
 
 
@@ -58,17 +70,22 @@ def test_extract_timestamps():
         ("V1", "00:01:15"),
         ("J1", "00:00:00"),
         ("V2", "00:05:00"),
+        ("V7", "00:00:51"),
+        ("V7", "00:01:42"),
+        ("J2", "00:00:00"),
+        ("J3", "00:00:00"),
+        ("J4", "00:00:00"),
+        ("V3", "00:00:10"),
     ]
 
 
 def test__extract_name_and_timestamp():
     assert _extract_name_and_timestamp(
         "V1 00:01:15 – Cool thing happened."
-    ) == ("V1", "00:01:15")
-    assert _extract_name_and_timestamp("J1 – Images dont have timestamps") == (
-        "J1",
-        "00:00:00",
-    )
+    ) == [("V1", "00:01:15")]
+    assert _extract_name_and_timestamp("J1 – Images dont have timestamps") == [
+        ("J1", "00:00:00")
+    ]
 
 
 def test__has_timestamp():
