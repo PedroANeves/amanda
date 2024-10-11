@@ -4,6 +4,7 @@
 ### added
 ### changed
 ### removed
+ - csv header from generated file
 
 2024-09-30
 ## 0.8.1

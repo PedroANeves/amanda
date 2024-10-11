@@ -251,9 +251,13 @@ def tk_gui(marker_strategy, title):
 
 
 def format_lines(data: list[tuple[str, str, str]]) -> list[str]:
-    return ["filepath,start,end\n"] + [
+    return [
         f"{_normalize_path(line[0])},{line[1]},{line[2]}\n" for line in data
     ]
+
+
+def format_lines_with_header(data: list[tuple[str, str, str]]) -> list[str]:
+    return ["filepath,start,end\n"] + format_lines(data)
 
 
 def _normalize_path(raw_path: str) -> str:

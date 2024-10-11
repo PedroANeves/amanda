@@ -15,6 +15,8 @@ from src.amanda import (
     extract_rows,
     extract_timestamps,
     find_file,
+    format_lines,
+    format_lines_with_header,
 )
 
 EXAMPLE_LINES = [
@@ -141,4 +143,31 @@ def test_build_lines():
         ("/path/to/V1.txt", "00:01:15", "00:01:25"),
         ("/path/to/V2.txt", "00:05:00", "00:05:10"),
         ("/path/to/J1.txt", "00:05:00", "00:05:10"),
+    ]
+
+
+def test_format_lines():
+    lines = [
+        ("filepath1", "start1", "end1"),
+        ("filepath2", "start2", "end2"),
+        ("filepath3", "start3", "end3"),
+    ]
+    assert format_lines(lines) == [
+        "filepath1,start1,end1\n",
+        "filepath2,start2,end2\n",
+        "filepath3,start3,end3\n",
+    ]
+
+
+def test_format_lines_with_header():
+    lines = [
+        ("filepath1", "start1", "end1"),
+        ("filepath2", "start2", "end2"),
+        ("filepath3", "start3", "end3"),
+    ]
+    assert format_lines_with_header(lines) == [
+        "filepath,start,end\n",
+        "filepath1,start1,end1\n",
+        "filepath2,start2,end2\n",
+        "filepath3,start3,end3\n",
     ]
