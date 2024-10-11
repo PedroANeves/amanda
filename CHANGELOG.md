@@ -1,4 +1,10 @@
 # Changelog
+2024-10-11
+## 1.0.0
+### added
+### changed
+### removed
+
 2024-09-30
 ## 0.8.1
 ### added
