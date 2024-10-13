@@ -5,6 +5,7 @@ import sys
 import tkinter as tk
 from collections import namedtuple
 from datetime import timedelta
+from pathlib import Path
 from tkinter import filedialog
 
 from docx import Document  # type: ignore
@@ -139,6 +140,13 @@ def _add_time_delta(start: str, delta: int = 10) -> str:
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
+def save_csv(data: list, filename: Path) -> None:
+    with open(filename, mode="w", encoding="utf-8") as f:
+        lines = format_lines(data)
+        for line in lines:
+            f.write(line)
+
+
 def tk_gui(marker_strategy, title):
     bg_color = "#2E2E2E"
     fg_color = "white"
@@ -246,6 +254,31 @@ def tk_gui(marker_strategy, title):
         fg=fg_color,
     )
     copy_button.pack(pady=10)
+
+    def _ui_save_csv():
+        f = filedialog.asksaveasfile(
+            mode="w",
+            defaultextension=".csv",
+            initialfile=f"amanda-{VERSION}.csv",
+            filetypes=(("csv", "*.csv"),),
+        )
+
+        if not f:  # user hit 'cancel' or closed dialog
+            return
+
+        text2save = text_display.get(1.0, tk.END)
+        f.write(text2save)
+        f.close()
+
+    # save button
+    save_button = tk.Button(
+        root,
+        text="Save CSV File",
+        command=_ui_save_csv,
+        bg=bg_color,
+        fg=fg_color,
+    )
+    save_button.pack(pady=10)
 
     root.mainloop()
 

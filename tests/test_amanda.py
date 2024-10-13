@@ -6,6 +6,7 @@ from docx import Document  # type: ignore
 
 from src.amanda import (
     EN_DASH,
+    VERSION,
     Row,
     _add_time_delta,
     _extract_name_and_timestamp,
@@ -17,6 +18,7 @@ from src.amanda import (
     find_file,
     format_lines,
     format_lines_with_header,
+    save_csv,
 )
 
 EXAMPLE_LINES = [
@@ -179,3 +181,19 @@ def test_format_lines_with_header():
         "filepath2,start2,end2\n",
         "filepath3,start3,end3\n",
     ]
+
+
+def test_save_csv(tmp_path):
+    lines = [
+        ("/path/to/V1.txt", "00:01:15", "00:01:25"),
+        ("/path/to/V2.txt", "00:05:00", "00:05:10"),
+        ("/path/to/J1.txt", "00:05:00", "00:05:10"),
+    ]
+    amanda_csv = tmp_path / f"amanda-{VERSION}.csv"
+    save_csv(lines, amanda_csv)
+    with open(amanda_csv, "r", encoding="utf-8") as f:
+        assert f.readlines() == [
+            "/path/to/V1.txt,00:01:15,00:01:25\n",
+            "/path/to/V2.txt,00:05:00,00:05:10\n",
+            "/path/to/J1.txt,00:05:00,00:05:10\n",
+        ]

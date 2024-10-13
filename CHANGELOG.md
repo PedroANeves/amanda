@@ -2,6 +2,7 @@
 2024-10-11
 ## 1.0.0
 ### added
+ - save as csv file option
 ### changed
  - "NOT_FOUND" to "NOT_FOUND_Vn" when the file is not found on folder
 ### removed
