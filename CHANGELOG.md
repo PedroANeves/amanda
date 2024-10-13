@@ -3,6 +3,7 @@
 ## 1.0.0
 ### added
 ### changed
+ - "NOT_FOUND" to "NOT_FOUND_Vn" when the file is not found on folder
 ### removed
  - csv header from generated file
 

@@ -146,6 +146,14 @@ def test_build_lines():
     ]
 
 
+def test_build_lines_file_not_found():
+    timestamps = [("V1", "00:01:15")]
+    videos = {}
+    assert build_lines(timestamps, videos) == [
+        ("NOT_FOUND_V1", "00:01:15", "00:01:25")
+    ]
+
+
 def test_format_lines():
     lines = [
         ("filepath1", "start1", "end1"),
